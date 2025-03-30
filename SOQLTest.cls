@@ -50,29 +50,29 @@
 	 //Q2
 	 @IsTest
 	 static void testGetContactsByFirstName() {
-			 // Create test data
-			 Contact testContact1 = new Contact(FirstName = 'John', LastName = 'Doe');
-			 Contact testContact2 = new Contact(FirstName = 'John', LastName = 'Smith');
-			 Contact testContact3 = new Contact(FirstName = 'Jane', LastName = 'Doe');
-			 insert new List<Contact>{ testContact1, testContact2, testContact3 };
-
-			 // Run method inside Test.startTest() to reset limits
-			 Test.startTest();
-			 List<Contact> contacts = SOQL.getContactsByFirstName(); // Replace with actual class name
-			 Test.stopTest();
-
-			 // Assert correct number of contacts returned
-			 System.assertEquals(2, contacts.size(), 'Number of contacts returned is incorrect.');
-
-			 // Assert correct contacts are returned
-			 Set<String> expectedNames = new Set<String>{ 'John Doe', 'John Smith' };
+		 // Create test data
+		 Contact testContact1 = new Contact(FirstName = 'John', LastName = 'Doe');
+		 Contact testContact2 = new Contact(FirstName = 'John', LastName = 'Smith');
+		 Contact testContact3 = new Contact(FirstName = 'Jane', LastName = 'Doe');
+		 insert new List<Contact>{ testContact1, testContact2, testContact3 };
+ 
+		 // Call the method to test
+		 List<Contact> contacts = SOQL.getContactsByFirstName('John'); //Replace null with your method call from SOQL class
+ 
+		 // Assert that the number of contacts returned is correct
+		 System.assertEquals(2, contacts.size(), 'Number of contacts returned is incorrect.');
+ 
+		 // Assert that the contacts returned have the correct names
+		 Set<String> contactNames = new Set<String>{ 'John Doe', 'John Smith' };
+		 try {
 			 for (Contact contact : contacts) {
-				 System.assert(expectedNames.contains(contact.FirstName + ' ' + contact.LastName),
-						 'Unexpected contact found: ' + contact.FirstName + ' ' + contact.LastName);
+				 System.assert(contactNames.contains(contact.Name), 'Contact name is incorrect.');
 			 }
+		 } catch (SObjectException ex) {
+			 Assert.fail('SObjectException thrown: ' + ex.getMessage());
 		 }
-
-
+	 }
+ 
 	 //Q3
 	 @IsTest
 	 static void testGetContactIdsByLastName() {
@@ -954,6 +954,5 @@
 			 'Primary Contact was set incorrectly.'
 		 );
 	 }
-
  }
  
